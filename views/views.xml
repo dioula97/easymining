@@ -1,0 +1,187 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    
+    <record model="ir.ui.view" id="easymining.site_list">
+      <field name="name">easymining site list</field>
+      <field name="model">easymining.site</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="description"/>
+          <field name="localisation"/>
+          <field name="minerai_ids" widget="many2many"/>
+          <field name="longueur"/>
+          <field name="largeur"/>
+          <field name="profondeur"/>
+          <field name="date_ouverture"/>
+          <field name="date_fermeture"/>
+          <field name="attachment_ids" widget="many2many"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="easymining.site_form">
+      <field name="name">easymining site form</field>
+      <field name="model">easymining.site</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+            </group>
+            <group>
+              <field name="description"/>
+            </group>
+            <group>
+              <field name="localisation"/>
+            </group>
+            <group string = "Documents">
+                  <field name="attachment_ids" widget="many2many">
+                    <tree>
+                      <field name="name"/>
+                      <field name="description"/>
+                      <field name="create_date"/>
+                      <field name="datas"/>
+                    </tree>
+                  </field>
+            </group>
+            <group string="Dimensions" col="3">
+              <group>
+                <field name="longueur"/>
+              </group>
+              <group>
+                <field name="largeur"/>
+              </group>
+              <group>
+                <field name="profondeur"/>
+              </group>
+            </group>
+            <group string="Dates">
+              <group>
+                <field name="date_ouverture"/>
+              </group>
+              <group>  
+                <field name="date_fermeture"/>
+              </group>
+            </group>
+            <notebook>
+              <page string="Minerais">
+                  <field name="minerai_ids"/>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="easymining.opminage_list">
+      <field name="name">Operations de minage</field>
+      <field name="model">easymining.opminage</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="date"/>
+          <field name="site_id"/>
+          <field name="minerai_ids"/>
+          <field name="prestataire_id"/>
+          <field name="pourcentage" widget="progressbar" string="% de non-respect des standards"/>
+          <field name="pourcentage" string="(%)"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="easymining.opminage_form">
+      <field name="name">easymining opminage form</field>
+      <field name="model">easymining.opminage</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="name"/>
+              </group>
+              <group>
+                <field name="date"/>
+              </group>
+            </group>
+            <group>
+              <group>
+                <field name="site_id"/>
+              </group>
+              <group>
+                  <field name="prestataire_id" domain="[('supplier', '=', 'True')]"/>  
+              </group>
+            </group>
+            <notebook>
+              <page>
+                 <group>
+                    <group>
+                      <field name="pourcentage" widget="progressbar" string="% de non-respect des standards"/>
+                    </group>
+                    <group>
+                      <field name="commentaire"/>
+                    </group>
+                 </group>
+              </page>
+            </notebook>
+            <notebook>
+              <page string="Minerais Utlises">
+                  <field name="minerai_ids"/>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+
+    
+
+    <!-- actions opening views on models -->
+    
+    <record model="ir.actions.act_window" id="easymining.action_window_site">
+      <field name="name">Liste des sites</field>
+      <field name="res_model">easymining.site</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="easymining.action_window_opminage">
+      <field name="name">Operations de minage</field>
+      <field name="res_model">easymining.opminage</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- Top menu item -->
+    
+    <menuitem name="Mines / Carrières" id="easymining.menu_root"/>
+    
+    <!-- menu categories -->
+    
+    <menuitem name="Sites" id="easymining.menu_site" parent="easymining.menu_root"/>
+    <menuitem name="Opérations de minage" id="easymining.menu_opminage" parent="easymining.menu_root"/>
+    <menuitem name="Chargements" id="easymining.menu_chargement" parent="easymining.menu_root"/>
+    <menuitem name="Carburant" id="easymining.menu_carburant" parent="easymining.menu_root"/>
+    <menuitem name="Prestataires" id="easymining.menu_prestataire" parent="easymining.menu_root"/>
+    
+    <!-- actions -->
+    
+    <menuitem name="List" id="easymining.menu_1_list1" parent="easymining.menu_site"
+              action="easymining.action_window_site"/>
+    <menuitem name="List" id="easymining.menu_1_list2" parent="easymining.menu_opminage"
+              action="easymining.action_window_opminage"/>
+    <menuitem name="List" id="easymining.menu_1_list3" parent="easymining.menu_chargement"
+              action="sale.action_quotations"/>
+    <menuitem name="List" id="easymining.menu_1_list4" parent="easymining.menu_carburant"
+              action="purchase.product_normal_action_puchased"
+              />
+    <menuitem name="List" id="easymining.menu_1_list5" parent="easymining.menu_prestataire"
+              action="base.action_partner_supplier_form"/>
+    <!--
+    <menuitem name="Server to list" id="easymining" parent="easymining.menu_2"
+              action="easymining.action_server"/>
+    -->
+  </data>
+</odoo>
